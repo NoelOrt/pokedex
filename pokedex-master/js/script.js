@@ -1,3 +1,5 @@
+
+
 const body=document.getElementsByTagName('body')[0]
 let fondo=localStorage.getItem('fondo1')
 body.setAttribute('data-theme',fondo)
@@ -23,6 +25,7 @@ function switchtheme(e){
 var ver=0
 const timer = ms => new Promise(res => setTimeout(res, ms))
 function setPokemonCard(rand, pokemon,b){
+    if(ver==0){
     localStorage.setItem("pokemon"+b, JSON.stringify(pokemon));
     var image = document.getElementById(`pokemon_img${rand}`)
     var name = document.getElementById(`pokemon_name${rand}`)
@@ -34,6 +37,30 @@ function setPokemonCard(rand, pokemon,b){
     attack.innerText =  pokemon.stats[1].base_stat
     defenses.innerText =  pokemon.stats[2].base_stat
     abilities.innerText =  pokemon.abilities.length
+
+
+    }
+    else{
+        console.log(pokemon)
+    localStorage.setItem("pokemon"+b, JSON.stringify(pokemon));
+    var image = document.getElementById(`pokemon_img${rand}`)
+    var name = document.getElementById(`pokemon_name${rand}`)
+    var attack = document.getElementById(`pokemon_attack${rand}`)
+    var defenses = document.getElementById(`pokemon_defenses${rand}`)
+    var abilities = document.getElementById(`pokemon_abilities${rand}`)
+    var weight= document.getElementById(`pokemon_weight${rand}`)
+    var height= document.getElementById(`pokemon_height${rand}`)
+    var base_experience= document.getElementById(`pokemon_base_experience${rand}`)
+    image.setAttribute("src", pokemon.sprites.other.dream_world.front_default)
+    name.innerText =  pokemon.name
+    attack.innerText =  pokemon.stats[1].base_stat
+    defenses.innerText =  pokemon.stats[2].base_stat
+    abilities.innerText =  pokemon.abilities.length
+    weight.innerText =  pokemon.weight
+    height.innerText =  pokemon.height
+    base_experience.innerText =  pokemon.base_experience
+    }
+    
 }
 
 function consultarPokemon(rand,b){      
@@ -56,18 +83,44 @@ function buscaPokemon(){
     consultarPokemon(idd)
     panel.appendChild(card)
 }
-
-document.getElementById("Busca").addEventListener("keyup", function(event){
-    if (event.keyCode === 13) {
-        buscaPokemon()
+function borrar(){
+    var txt=document.getElementById("Busca")
+    txt.value=''
+    for (var i = 0; i < 10; i++) {
+        var n= i+10;
+        
+        document.getElementById('pokemon_card'+i).style.display = '';
     }
-}); 
 
-document.getElementById("Busca").addEventListener("focusout", function(event){
-    var panel = document.getElementsByClassName("panel")[0]
-    panel.innerHTML = ""
-    $id = gerarCards(1)
-}); 
+
+}
+
+function search(){
+    console.log('a entrado en busqueda')
+    var txt=document.getElementById("Busca").value
+    console.log(txt)
+    let card=[]
+    let coincide=[]
+    for (var i = 0; i < 10; i++) {
+        var n= i+10;
+        
+        card[i]=JSON.parse(localStorage.getItem("pokemon"+n));
+        //console.log(card[i].name)
+     }
+    for(var j=0;j<10;j++){
+        coincide[j] = card[j].name.indexOf(txt);
+        //console.log(coincide)
+    }
+    for(var k=0;k<10;k++){
+        if(coincide[k]==0){
+            console.log('pokemon_card'+k)
+        document.getElementById('pokemon_card'+k).style.display = '';}
+        else{document.getElementById('pokemon_card'+k).style.display = 'none';}
+    }
+
+    
+
+}
 
 
 function criaCardPokemon(id){
@@ -96,6 +149,44 @@ function criaCardPokemon(id){
     `
     return card
 }
+function criaCardPokemon2(id){
+    var card = `
+        <div class="img_card">
+            <img id="pokemon_img${id}" src="">
+        </div>
+
+        <p class="pokemon_id">ID: #${id}</p>
+        <p class="pokemon_name" id="pokemon_name${id}"></p>
+
+        <div class="pokemon_attributes">
+            <div class="attribute">
+                <p class="pokemon_attack" id="pokemon_attack${id}"></p>
+                <p>attack</p>
+            </div>
+            <div class="attribute">
+                <p class="pokemon_defenses" id="pokemon_defenses${id}"></p>
+                <p>defenses</p>
+            </div>
+            <div class="attribute">
+                <p class="pokemon_abilities" id="pokemon_abilities${id}"></p>
+                <p>abilities</p>
+            </div>
+            <div class="attribute">
+                <p class="pokemon_abilities" id="pokemon_weight${id}"></p>
+                <p>weight</p>
+            </div>
+            <div class="attribute">
+                <p class="pokemon_abilities" id="pokemon_height${id}"></p>
+                <p>height</p>
+            </div>
+            <div class="attribute">
+                <p class="pokemon_abilities" id="pokemon_base_experience${id}"></p>
+                <p>base_experience</p>
+            </div>
+        </div>
+    `
+    return card
+}
 
 
 function gerarCards(id = 1){
@@ -112,6 +203,7 @@ function gerarCards(id = 1){
             let rand = Math.floor(Math.random() *600) + 1;
             card.className = "pokemon_card"
             card.id="pokemon_card"+a
+            
             card.innerHTML = criaCardPokemon(rand)
             consultarPokemon(rand,b)
             panel.appendChild(card)
@@ -132,24 +224,36 @@ async function borrarCard3(){
     return
 }
 
-function verPoke(consulta){
+async function verPoke(consulta){
     rand=consulta.id;
     console.log(rand)
     var panel = document.getElementById("panelCon")
     var card = document.createElement("div")  
     card.className="pokemon_card"+3
-    card.innerHTML = criaCardPokemon(rand)
+    card.innerHTML = criaCardPokemon2(rand)
     consultarPokemon(rand)
     console.log(card)
-    panel.replaceWith(card)
+    panel.appendChild(card)
     console.log('verpoke')
     ver=5
+    await timer(1000)
+    //actualizarurl(rand)
+    
+   
     return
 }
+function actualizarurl(rand){
+var url = window.location.href;
+    localStorage.setItem("url",url);
+    window.location.href=url+'?pokeID='+rand+'.'}
+    
 function ampPoke(consulta,ver){
     if(ver==0){verPoke(consulta)}
-    //else{borrarCard3()}
-    else{location.reload();}
+    else{
+        //var url=localStorage.getItem("url")
+        //window.location.href=url
+        borrarCard3()}
+    //else{location.reload();}
 }
 
 

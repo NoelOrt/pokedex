@@ -145,7 +145,7 @@ main #form input[type="submit"]:hover{
 .pokemon_card:hover{
     background-color: #3e8e41   
 }
-.pokemon_card:active{
+.pokemon_card0:active{
     background-color: #3e8e41;
     box-shadow: 0 5px #666;
     transform: translateY(4px);
@@ -160,6 +160,7 @@ main #form input[type="submit"]:hover{
     display:inline-block;
     text-align: center;
     border-radius: 10px;
+    
 }
 .pokemon_card3{
     position: relative;

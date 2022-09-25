@@ -1,5 +1,18 @@
 
+/*
+    var initUrl=new URL(window.location);
+    console.log(initUrl.search)
+    const onlyNumbers = initUrl.search.replace(/[^0-9]+/g, "");
+    console.log(onlyNumbers)
 
+if(onlyNumbers>0){
+    ver=1
+    verPoke(onlyNumbers)
+    var del=getElementsByClassName('pokemon_card')
+    //del.remove()
+}
+*/
+var ver=0
 const body=document.getElementsByTagName('body')[0]
 let fondo=localStorage.getItem('fondo1')
 body.setAttribute('data-theme',fondo)
@@ -22,7 +35,7 @@ function switchtheme(e){
 
     }
 }
-var ver=0
+
 const timer = ms => new Promise(res => setTimeout(res, ms))
 function setPokemonCard(rand, pokemon,b){
     if(ver==0){
@@ -43,24 +56,41 @@ function setPokemonCard(rand, pokemon,b){
     else{
         console.log(pokemon)
     localStorage.setItem("pokemon"+b, JSON.stringify(pokemon));
+    var nTypes=pokemon.types.length
+    var types
+    for(var i=0; i<nTypes;i++){
+        console.log('valor'+i)
+        console.log(nTypes)
+        let varname= "var"+i
+        let varname1= "varr"+i
+        console.log('valor'+i)
+        window[varname] = document.getElementById(`pokemon_types${i}${rand}`)
+        window[varname1] = document.getElementById(`pokemon_type${i}${rand}`)
+        console.log(rand)
+        window[varname].innerText = pokemon.types[i].type.name
+        window[varname1].innerText = 'type '+i
+       
+       
+    }
+    for(var j=nTypes;j<3;j++){
+        var element=document.getElementById(`attribute`+j)
+        element.remove()
+    }
+    console.log(var0)
+    console.log(nTypes)
     var image = document.getElementById(`pokemon_img${rand}`)
+    var image2 = document.getElementById(`pokemon_img2${rand}`)
     var name = document.getElementById(`pokemon_name${rand}`)
     var attack = document.getElementById(`pokemon_attack${rand}`)
     var defenses = document.getElementById(`pokemon_defenses${rand}`)
-    var abilities = document.getElementById(`pokemon_abilities${rand}`)
-    var weight= document.getElementById(`pokemon_weight${rand}`)
-    var height= document.getElementById(`pokemon_height${rand}`)
-    var base_experience= document.getElementById(`pokemon_base_experience${rand}`)
-    image.setAttribute("src", pokemon.sprites.other.dream_world.front_default)
+    image.setAttribute("src", pokemon.sprites.front_default)
+    image2.setAttribute("src", pokemon.sprites.back_default)
     name.innerText =  pokemon.name
     attack.innerText =  pokemon.stats[1].base_stat
     defenses.innerText =  pokemon.stats[2].base_stat
-    abilities.innerText =  pokemon.abilities.length
-    weight.innerText =  pokemon.weight
-    height.innerText =  pokemon.height
-    base_experience.innerText =  pokemon.base_experience
+   
     }
-    
+ return   
 }
 
 function consultarPokemon(rand,b){      
@@ -153,6 +183,8 @@ function criaCardPokemon2(id){
     var card = `
         <div class="img_card">
             <img id="pokemon_img${id}" src="">
+            <img id="pokemon_img2${id}" src="">
+
         </div>
 
         <p class="pokemon_id">ID: #${id}</p>
@@ -168,21 +200,18 @@ function criaCardPokemon2(id){
                 <p>defenses</p>
             </div>
             <div class="attribute">
-                <p class="pokemon_abilities" id="pokemon_abilities${id}"></p>
-                <p>abilities</p>
+                <p class="pokemon_types" id="pokemon_types0${id}"></p>
+                <p id="pokemon_type0${id}"></p>
             </div>
-            <div class="attribute">
-                <p class="pokemon_abilities" id="pokemon_weight${id}"></p>
-                <p>weight</p>
+            <div class="attribute" id="attribute1">
+                <p class="pokemon_types" id="pokemon_types1${id}"></p>
+                <p id="pokemon_type1${id}"></p>
             </div>
-            <div class="attribute">
-                <p class="pokemon_abilities" id="pokemon_height${id}"></p>
-                <p>height</p>
+            <div class="attribute" id="attribute2">
+                <p class="pokemon_types" id="pokemon_types2${id}"></p>
+                <p id="pokemon_type2${id}"></p>
             </div>
-            <div class="attribute">
-                <p class="pokemon_abilities" id="pokemon_base_experience${id}"></p>
-                <p>base_experience</p>
-            </div>
+          
         </div>
     `
     return card
@@ -215,17 +244,15 @@ function gerarCards(id = 1){
     }
     return id
 }
-async function borrarCard3(){
+function borrarCard3(){
     var panel = document.getElementsByClassName("pokemon_card3")[0]
     panel.remove()
     ver=0
-    await timer(100)
-    console.log(ver)
     return
 }
 
-async function verPoke(consulta){
-    rand=consulta.id;
+function verPoke(consulta){
+    rand=consulta;
     console.log(rand)
     var panel = document.getElementById("panelCon")
     var card = document.createElement("div")  
@@ -236,24 +263,27 @@ async function verPoke(consulta){
     panel.appendChild(card)
     console.log('verpoke')
     ver=5
-    await timer(1000)
-    //actualizarurl(rand)
-    
-   
+    localStorage.setItem('ver',ver)
+    console.log(ver)
+    actualizarurl(rand)
     return
 }
+
 function actualizarurl(rand){
-var url = window.location.href;
+    const url = new URL(window.location);
     localStorage.setItem("url",url);
-    window.location.href=url+'?pokeID='+rand+'.'}
+    url.searchParams.set('pokeID', rand);
+    window.history.pushState({}, '', url)}
     
+
 function ampPoke(consulta,ver){
-    if(ver==0){verPoke(consulta)}
+    if(ver==0){verPoke(consulta.id)}
     else{
-        //var url=localStorage.getItem("url")
-        //window.location.href=url
-        borrarCard3()}
-    //else{location.reload();}
+        var url=localStorage.getItem("url")
+        window.history.pushState('', '', url)
+        borrarCard3()
+    }
+    
 }
 
 

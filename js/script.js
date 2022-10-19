@@ -1,3 +1,18 @@
+/*
+comentari: ús de localStorage vs sessionStorage
+
+localStorage és persistent, i les dades queden guardades a no ser que s'eliminin manualment netejant dades de navegació
+o creant una funció específica per eliminar-les. És útil en casos com per exemple, guardar les preferències del theme dark/light
+perquè l'usuari ho seleccioni, i quan torni a entrar a la web un altre dia li conservi la selecció.
+
+sessionStorage és temporal. Les dades es borren al tancar el navegador. És útil per guardar dades temporals que ens interessen
+mentre utilitzem l'aplicació, però que no té sentit guardarles de manera permanent. Per exemple, guardar el llistat de pokemons,
+tindria més sentit guardar-lo forma temporal i que s'esborri al tancar el navegador, ja que quan es torni a entrar
+es carregaran de nou.
+
+localStorage i sessionStorage s'utilitzen exactament igual, només canvia el nom (i el comportament)
+*/
+
 
 /*
     var initUrl=new URL(window.location);
@@ -248,6 +263,7 @@ function borrarCard3(){
     var panel = document.getElementsByClassName("pokemon_card3")[0]
     panel.remove()
     ver=0
+    // comentari: si la funció no retorna cap valor no és necessari posar un return
     return
 }
 
@@ -333,3 +349,25 @@ document.getElementById("pokemon_card9").addEventListener("click", function(){
     consulta=JSON.parse(localStorage.getItem("pokemon19"));
     console.log(consulta)
     ampPoke(consulta,ver)})
+
+
+    /* comentari: enlloc de crear a ma un event listener per cada carta, les pots consultar totes de cop i aplicar un event listener amb un forEach,
+    i només caldria obtenir el seu número del id i afegir-lo a "pokemon1" per obtenir-lo de localStorage
+    per exemple:
+    pokemon_card2 -> es separa en "pokemon_card" i "2" -> es fa getItem de "pokemon1"+"2" que es converteix en getItem de "pokemon12"
+
+    const pokes = document.querySelectorAll('.pokemon_card')
+
+    pokes.forEach( poke => poke.addEventListener("click", function(){
+        
+        let temp = poke.id.split("pokemon_card");     
+        console.dir(temp);
+        console.log(`id: ${poke.id} , num id: ${temp[1]}`);
+        let numId = temp[1]
+        consulta=JSON.parse(localStorage.getItem("pokemon1"+numId));
+        console.log(consulta)
+        ampPoke(consulta,ver)
+        })
+    )
+
+    */

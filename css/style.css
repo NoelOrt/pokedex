@@ -1,3 +1,5 @@
+/* comentari: bon ús de les variables aplicades al tema dark/light */
+
 @charset "UTF-8";
 :root{
     --dark:rgb(131, 145, 146);
@@ -131,6 +133,11 @@ main #form input[type="submit"]:hover{
     display:inline-block;
     text-align: center;
     border-radius: 10px;
+    /* comentari: 
+    si a un element al que se li vol aplicar :hover, es defineix una transició, el canvi de color no és tan brusc.
+    transition: all .3s   <---- això aplica una transició de 0.3 segons sobre tots els canvis que hi hagi al hover (si per exemple també es volgués canviar el color de text)
+    transition: background-color .3s   <---- això aplica una transició específicament sobre el canvi de color del background
+    */
 }
 .pokemon_card1{
     position: relative;
@@ -144,7 +151,8 @@ main #form input[type="submit"]:hover{
     border-radius: 10px;
 }
 .pokemon_card:hover{
-    background-color: #3e8e41   
+    background-color: #3e8e41;
+    /* comentari: molt bé el detall del canvi de color al :hover , però vigilar amb el contrast dels colors per temes d'accessibilitat. El to vermellós de text amb un fons verdós no és gaire llegible. */   
 }
 .pokemon_card0:active{
     background-color: #3e8e41;

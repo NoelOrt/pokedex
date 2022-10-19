@@ -1,3 +1,11 @@
+/* comentari: les parts comuns, com el selector de tema, es poden posar en un script a part, i cridar-lo
+per exemple:
+
+<script src="js/script.js"></script>
+<script src="js/theme.js"></script>
+
+*/
+
 const body=document.getElementsByTagName('body')[0]
 let fondo=localStorage.getItem('fondo')
 body.setAttribute('data-theme',fondo)
